@@ -1,20 +1,34 @@
 import { cn } from "@/lib/utils";
-import {  ChevronsLeft, MenuIcon } from "lucide-react";
+import {  ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery} from "usehooks-ts";
 import { UserItem } from "./user-item";
+import { Item } from "./item";
+import { useMutation } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { toast } from "sonner";
+import { DocumentsList } from "./documents-list";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { TrashBox } from "./trash-box";
+import { useSearch } from "../../../../hooks/use-search";
+import { useSettings } from "../../../../hooks/use-settings";
  
 export const Navigation = () => {
 
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width:768px)")
 
+    const create = useMutation(api.documents.create);
+
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ElementRef<"aside">>(null);
     const navbarRef = useRef<ElementRef<"div">>(null);
     const [isResetting,setIsResetting] = useState(false);
     const [isCollapsed,setIsCollapsed] = useState(isMobile); 
+
+    const search = useSearch();
+    const settings = useSettings();
 
 
     useEffect(()=>{
@@ -100,6 +114,16 @@ export const Navigation = () => {
         }
     }
 
+    const handleCreate = () => {
+        const promise = create({title : "untitled" })
+
+        toast.promise(promise,{
+            loading : "Creating a new note...",
+            success : "Note created succesfully",
+            error : "Failed to create a new note"
+        });
+    }
+
     return ( 
     <>
         <aside
@@ -122,10 +146,44 @@ export const Navigation = () => {
 
             <div>
                 <UserItem/>
+                <Item 
+                label="search"
+                icon={Search}
+                isSearch
+                onClick={search.onOpen}
+                />
+
+                <Item 
+                label="settings"
+                icon={Settings}
+                onClick={settings.onOpen}
+                />
+
+                <Item 
+                onClick={handleCreate} 
+                label="New page" 
+                icon={PlusCircle} />
             </div>
 
             <div className="mt-4">
-                <p>documents</p>
+                <DocumentsList/>
+
+                <Item 
+                label="Add a page"
+                icon={Plus}
+                onClick={handleCreate}
+                />      
+
+                <Popover>
+                    <PopoverTrigger className="w-full mt-4">
+                        <Item label="Trash" icon={Trash}/>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="p-0 w-72" side={isMobile ? "bottom" : "right"}>
+                        <TrashBox/>
+                    </PopoverContent>
+                </Popover>
+
             </div>
 
             <div
