@@ -1,6 +1,6 @@
 "use client"
 
-import { resetPaginationId, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";

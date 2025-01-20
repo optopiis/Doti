@@ -1,7 +1,7 @@
 "use client"
 
 import { useMutation, useQuery } from "convex/react";
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { api } from "../../../../convex/_generated/api";
 import { useState } from "react";
 import { Id } from "../../../../convex/_generated/dataModel";
@@ -18,7 +18,6 @@ import { ConfirmModal } from "@/components/modals/alert-modal";
 export const TrashBox = () => {
 
     const router = useRouter();
-    const params = useParams();
     const documents = useQuery(api.documents.getTrash);
     const restore = useMutation(api.documents.restore);
     const remove = useMutation(api.documents.remove);

@@ -22,7 +22,6 @@ interface DocumentIdPageProps {
     const Editor = useMemo(() => dynamic(() => import ("@/components/editor"), {ssr : false}), []);
 
     const params = React.use(paramsPromise);
-    const { documentId } = params;
     
 
     const document = useQuery(api.documents.getById,{
