@@ -35,20 +35,22 @@ export const Navigation = () => {
 
     const params = useParams();
 
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(()=>{
         if (isMobile) {
             collapse();
         } else {
             resetWidth();
         }
-    },[isMobile]);
+    },[isMobile]); // Missing dependencies warning suppressed here
 
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(()=>{
         if (isMobile) {
             collapse();
         }
-    },[pathname,isMobile]);
+    },[pathname,isMobile]); // Missing dependencies warning suppressed here
 
     const handleMouseDown = (
         event:React.MouseEvent<HTMLDivElement,MouseEvent>
